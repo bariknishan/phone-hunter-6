@@ -3,7 +3,9 @@
 }
 
 
-
+.text-danger{
+    display: none;
+}
 .card img{
     height: 400px;
     width: 300px;
