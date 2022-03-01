@@ -1,32 +1,33 @@
-////////// serach area ///////////
+
+
+
+//////////---------------------------------search area --------------------------///////////
 
 
 const searchPhone = (phones) => {
   const searchField = document.getElementById("search-Field");
   const searchText = searchField.value;
-  // console.log(searchText);
   searchField.value = "";
- 
-  if (searchText == "" )  {
-    // alert("Search something")
-    document.getElementById("error-field").style.display = "block";
 
-    document.getElementById("search-result").style.display="none";
+  if (searchText == "") {
+    document.getElementById("error-field").style.display = "block";
+    document.getElementById("search-result").style.display = "none";
   }
 
   else {
     document.getElementById("error-field").style.display = "none";
     const url = ` https://openapi.programming-hero.com/api/phones?search=${searchText}`
-    // console.log(url);
+
     fetch(url)
       .then(res => res.json())
       .then(phones => displaySearchResults(phones.data.slice(0, 20)));
-      
-      
+
   }
 };
 
-  const displaySearchResults = phones => {
+/////////////////------------------ Display result area--------------------//////////////////////
+
+const displaySearchResults = phones => {
   const searchPhoneResult = document.getElementById("search-result");
   searchPhoneResult.textContent = "";
   phones.forEach(phone => {
@@ -39,30 +40,24 @@ const searchPhone = (phones) => {
             <h5 class="card-title">${phone.phone_name}</h5>
             <h6 class="card-brand">Brand:${phone.brand}</h6>
             <button  onclick= "loadPhoneDetails('${phone.slug}') "  type="button" class="btn btn-primary w-75 mx-auto">Details</button>
-           
           </div>
-        </div>
-
-       `;
-
+        </div>  `;
+        
     searchPhoneResult.appendChild(div);
-    
+
   });
 }
-
 const loadPhoneDetails = phoneId => {
-  
   const url = `https://openapi.programming-hero.com/api/phone/${phoneId} `
   fetch(url)
     .then(res => res.json())
     .then(phones => displayPhoneDetails(phones.data));
 }
 
-
-///////////phone Details Area////////////////
+///////////-----------------------------------phone Details -----------------Area////////////////
 
 const displayPhoneDetails = phone => {
- 
+
   const phoneDetails = document.getElementById("phone-details");
   phoneDetails.textContent = "";
   const div = document.createElement("div");
@@ -86,8 +81,8 @@ const displayPhoneDetails = phone => {
    </div>  `;
 
   phoneDetails.appendChild(div);
-  
-  
-  
+
+
+
 }
 
