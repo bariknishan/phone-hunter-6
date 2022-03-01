@@ -1,44 +1,89 @@
 // console.log("hello")
 
+
+document.getElementById("error-field").style.display ="none";
+
 const searchPhone =() => {
   const searchField=  document.getElementById("search-Field");
   const searchText= searchField.value;
   console.log(searchText);
-  searchField.value="";
 
+  searchField.value="";
+  
+
+if (searchText== ''  ) {
+  // alert("Search something")
+  document.getElementById("error-field").style.display ="block";
+}
+
+else{
+  document.getElementById("error-field").style.display ="none";
   const url= ` https://openapi.programming-hero.com/api/phones?search=${searchText}`
   console.log(url);
   fetch(url)
   .then(res=> res.json())
-  .then(data=> displaySearchResults(data.data));
+  .then(phones=> displaySearchResults(phones.data)); 
 
+
+}
 } ;
 
 
-const displaySearchResults= data=>{
+const displaySearchResults= phones=>{
     // console.log(data);
 
-    const searchResult= document.getElementById("search-result");
-        data.forEach( data => {
-        console.log(data);
+    const searchPhoneResult= document.getElementById("search-result");
+      searchPhoneResult.textContent="";
+        phones.forEach( phone => {
+        // console.log(phone);
         const div= document.createElement("div");
         div.classList.add("col");
         div.innerHTML=`  
-        <div class="card ">
-          <img src="${data.image}" class="card-img-top" alt="...">
+        <div class="card    ">
+          <img src="${phone.image}" class="card-img-top" alt="...">
           <div class="card-body">
-            <h5 class="card-title">${data.phone_name}</h5>
-            <h6 class="card-brand">Brand:${data.brand}</h6>
-            <button type="button" class="btn btn-primary w-100 mx-auto">Details</button>
+            <h5 class="card-title">${phone.phone_name}</h5>
+            <h6 class="card-brand">Brand:${phone.brand}</h6>
+            <button  onclick= "loadPhoneDetails('${phone.slug}')"  type="button" class="btn btn-primary w-100 mx-auto">Details</button>
            
           </div>
         </div>
 
        `;
 
-      searchResult.appendChild(div);
-
-
-
+      searchPhoneResult.appendChild(div);
     });
+}
+
+
+
+const loadPhoneDetails =  phoneId =>{
+  // console.log(phoneId);
+
+  const url =`https://openapi.programming-hero.com/api/phone/${phoneId} `
+
+  fetch(url)
+  .then(res=> res.json())
+  .then(phones=>  displayPhoneDetails(phones.data));
+}
+
+   const displayPhoneDetails = phone =>{
+  console.log(phone)
+
+  const phoneDetails= document.getElementById("phone-details");
+   phoneDetails.textContent="";
+   const div = document.createElement("div");
+   div.classList.add("card")
+   div.innerHTML=`<img src= "${phone.image}" class="card-img-top" alt="...">
+   <div class="card-body">
+     <h5 class="card-title fw-bold">${phone.name}</h5>
+     <h6 class="card-title fw-bold">Brand:${phone.brand}</h6>
+     <h6 class="card-title fw-bold ">Model ID:${phone.slug}</h6>
+     <p class="card-text  ">Storage:${phone.mainFeatures.storage}</p>
+     <p class="card-text ">Sensor: ${phone.mainFeatures.sensors}</p>
+     <p class="card-text ">Relase Date: ${phone.releaseDate}</p>
+   </div>  `;
+
+   phoneDetails.appendChild(div);
+
 }
