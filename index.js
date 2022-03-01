@@ -7,24 +7,25 @@ const searchPhone = () => {
   const searchText = searchField.value;
   console.log(searchText);
   searchField.value = "";
-
-  if (searchText == '') {
+ 
+  if (searchText ==""  ) {
     // alert("Search something")
     document.getElementById("error-field").style.display = "block";
+    document.getElementById("search-result").style.display="none";
   }
+
   else {
     document.getElementById("error-field").style.display = "none";
 
     const url = ` https://openapi.programming-hero.com/api/phones?search=${searchText}`
-    console.log(url);
+    // console.log(url);
     fetch(url)
       .then(res => res.json())
       .then(phones => displaySearchResults(phones.data.slice(0, 20)));
   }
 };
-const displaySearchResults = phones => {
-  // console.log(data);
-
+  const displaySearchResults = phones => {
+   
   const searchPhoneResult = document.getElementById("search-result");
   searchPhoneResult.textContent = "";
   phones.forEach(phone => {
@@ -33,7 +34,7 @@ const displaySearchResults = phones => {
     div.classList.add("col");
     div.innerHTML = `  
         <div class="card ">
-          <img src="${phone.image}" class="card-img-top" alt="...">
+          <img  src="${phone.image}" class="card-img-top" alt="...">
           <div class="card-body">
             <h5 class="card-title">${phone.phone_name}</h5>
             <h6 class="card-brand">Brand:${phone.brand}</h6>
@@ -56,15 +57,18 @@ const loadPhoneDetails = phoneId => {
     .then(phones => displayPhoneDetails(phones.data));
 }
 
+
+///////////phone Details Area////////////////
+
 const displayPhoneDetails = phone => {
   //  console.log(phone)
   const phoneDetails = document.getElementById("phone-details");
   phoneDetails.textContent = "";
   const div = document.createElement("div");
   div.classList.add("card")
-  div.innerHTML = `<img src= "${phone.image}" class="card-img-top" alt="...">
+  div.innerHTML = `<img   src= "${phone.image}" class="card-img-top" alt="...">
    <div class="card-body">
-     <h5 class="card-title fw-bold">${phone.name}</h5>
+     <h5 class="card-title  fw-bold">${phone.name}</h5>
      <h6 class="card-title fw-bold">Brand:${phone.brand}</h6>
      <h6 class="card-title fw-bold ">Model ID:${phone.slug}</h6>
      <h4 class="card-title fw-bold " > Main Features:</h4>
@@ -76,6 +80,9 @@ const displayPhoneDetails = phone => {
      <p class="card-text ">GPS: ${phone.others?.GPS}</p>
      <p class="card-text ">NFC: ${phone.others?.NFC}</p>
      <p class="card-text ">RADIO: ${phone.others?.Radio}</p>
+     if(${phone.others==""}){
+     console.log(" result not found")
+     }
      <p class="card-text ">USB: ${phone.others?.USB}</p>
      <p class="card-text ">Relase Date:${phone.releaseDate}</p>
    </div>  `;
